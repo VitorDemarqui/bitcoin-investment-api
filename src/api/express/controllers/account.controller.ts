@@ -1,6 +1,5 @@
 import { Request, Response } from "express";
 
-
 import { prisma } from "../../../util/prisma.util";
 import { Account } from "../../../entities/account";
 import { AccountRepositoryPrisma } from "../../../repositories/account/prisma/account.repository.prisma";

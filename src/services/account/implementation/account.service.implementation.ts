@@ -1,4 +1,5 @@
-import e from "express";
+import bcrypt from "bcrypt";
+
 import { Account } from "../../../entities/account";
 import { AccountService, CreateAccountOutputDto } from "../account.service";
 import { AccountRepository } from "../../../repositories/account/account.repository";
@@ -32,6 +33,20 @@ export class AccountServiceImplementation implements AccountService {
         };
 
         return output;
+    }
+
+    public async validateCredentials(email: string, password: string): Promise<void> {
+        const account = await this.repository.findByEmail(email);
+
+        if(!account) {
+            throw new BadRequestError('The email/password you entered isnt connected to an account');
+        }
+
+        const passwordIsValid = bcrypt.compareSync(password, account.password);
+
+        if(!passwordIsValid) {
+            throw new BadRequestError('The email/password you entered isnt connected to an account');
+        }
     }
     
 }

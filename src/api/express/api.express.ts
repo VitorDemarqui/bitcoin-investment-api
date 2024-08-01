@@ -1,4 +1,5 @@
-import { validate } from "../../validations/validation";
+import { authMiddleware } from "../../middlewares/auth.middleware";
+import { validate } from "../../middlewares/validations/validation";
 import { Api } from "../api";
 import express, { Express, Request, Response } from "express";
 
@@ -19,11 +20,15 @@ export class ApiExpress implements Api {
     public addPostRoute(
         path: string,
         schema: any,
-        //isProtected: "protected" | undefined,
+        authRequired: Boolean,
         handle: (req: Request, res: Response) => Promise<void>
     ): void {
-        //console.log(isProtected)
-        this.app.post(path,validate(schema), handle);
+        const middleware: any[] = [];
+        
+        schema && middleware.push(validate(schema));
+        if(authRequired) middleware.push(authMiddleware);
+
+        this.app.post(path, middleware, handle);
     }
 
     public start(port: number) {
