@@ -26,10 +26,29 @@ export class AccountRepositoryPrisma implements AccountRepository {
             aAccount.id,
             data.name,
             data.email,
-            aAccount.createdAt.toString(),
+            aAccount.balance,
+            aAccount.created_at.toString(),
             data.password
         )
     }
+
+    public async update(account: Account): Promise<void> {
+        const data = {
+            id: account.id,
+            name: account.name,
+            email: account.email,
+            balance: account.balance,
+            password: account.password,
+        };
+
+        await this.prisma.account.update({
+            where: {
+                id: account.id
+            },
+            data,
+        });
+    }
+
     
     public async findById(id: string): Promise<Account> {
         const aAccount = await this.prisma.account.findUnique({
@@ -40,9 +59,9 @@ export class AccountRepositoryPrisma implements AccountRepository {
             throw new NotFoundError("Account not found");
         }
 
-        const { name, email, createdAt, password } = aAccount;
+        const { name, email, balance, created_at, password } = aAccount;
 
-        const response = Account.with(id, name, email, createdAt.toString(), password);
+        const response = Account.with(id, name, email, balance, created_at.toString(), password);
 
         return response;
     }
@@ -56,9 +75,9 @@ export class AccountRepositoryPrisma implements AccountRepository {
             return null;
         }
 
-        const { id, name, createdAt, password } = aAccount;
+        const { id, name, balance, created_at, password } = aAccount;
 
-        const response = Account.with(id, name, email, createdAt.toString(), password);
+        const response = Account.with(id, name, email, balance, created_at.toString(), password);
 
         return response;
     }

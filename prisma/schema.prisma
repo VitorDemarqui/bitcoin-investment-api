@@ -18,6 +18,21 @@ model Account {
   id        String @id @default(uuid())
   name      String
 	email     String @unique
-  createdAt DateTime @default(now())
+  balance   Decimal @db.Decimal(15, 2) @default(0.00)
+  created_at DateTime @default(now())
 	password  String
+	Deposit Deposit[]
 }
+
+model Deposit {
+  @@map("deposits")
+  id         String @id @default(uuid())
+  amount     Decimal @db.Decimal(15, 2)
+  created_at DateTime @default(now())
+  email_sent Boolean @default(false)
+
+  account_id String
+  account    Account @relation(fields: [account_id], references: [id])
+}
+
+    

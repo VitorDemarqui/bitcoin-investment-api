@@ -4,6 +4,7 @@ import { prisma } from "../../../util/prisma.util";
 import { Account } from "../../../entities/account";
 import { AccountRepositoryPrisma } from "../../../repositories/account/prisma/account.repository.prisma";
 import { AccountServiceImplementation } from "../../../services/account/implementation/account.service.implementation";
+import { Decimal } from "@prisma/client/runtime/library";
 
 export class AccountController {
     private constructor(){}
@@ -15,7 +16,7 @@ export class AccountController {
     public async create(request: Request, response: Response) {
         const { name, email, password } = request.body;
 
-        const aAccount = Account.with("", name, email, "", password)
+        const aAccount = Account.with("", name, email, new Decimal(0.00), "", password)
 
         const aRepository = AccountRepositoryPrisma.build(prisma);
         const aService = AccountServiceImplementation.build(aRepository);

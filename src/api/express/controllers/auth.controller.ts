@@ -18,17 +18,19 @@ export class AuthController {
         const aRepository = AccountRepositoryPrisma.build(prisma);
         const aService = AccountServiceImplementation.build(aRepository);
 
-        await aService.validateCredentials(email, password);
-        
+        const output = await aService.validateCredentials(email, password);
+        const { id } = output;
+
         const secret = process.env.SECRET;
 
         const token = jwt.sign(
             {
+                id,
                 email
             },
             secret ?? '',
             {
-                expiresIn: 120
+                expiresIn: "24h"
             }
         )
 

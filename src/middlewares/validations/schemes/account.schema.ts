@@ -10,7 +10,7 @@ export const accountSchema = {
         required: true
     },
     password: {
-        min: passwordLength,
+        minLength: passwordLength,
         required: true
     }
 }
@@ -21,7 +21,7 @@ export const loginSchema = {
         required: true
     },
     password: {
-        min: passwordLength,
+        minLength: passwordLength,
         required: true
     }
 }

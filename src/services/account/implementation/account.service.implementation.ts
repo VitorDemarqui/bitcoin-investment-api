@@ -1,9 +1,10 @@
 import bcrypt from "bcrypt";
 
 import { Account } from "../../../entities/account";
-import { AccountService, CreateAccountOutputDto } from "../account.service";
+import { AccountAuthenticatedOutputDto, AccountService, CreateAccountOutputDto } from "../account.service";
 import { AccountRepository } from "../../../repositories/account/account.repository";
 import { BadRequestError } from "../../../helpers/api-errors.helper";
+import { Decimal } from "@prisma/client/runtime/library";
 
 export class AccountServiceImplementation implements AccountService {
     private constructor(readonly repository: AccountRepository){}
@@ -27,15 +28,15 @@ export class AccountServiceImplementation implements AccountService {
 
         const output: CreateAccountOutputDto = {
             id: newAccount.id,
-            name: name,
-            email: email,
+            name,
+            email,
             createdAt: newAccount.createdAt
         };
 
         return output;
     }
 
-    public async validateCredentials(email: string, password: string): Promise<void> {
+    public async validateCredentials(email: string, password: string): Promise<AccountAuthenticatedOutputDto> {
         const account = await this.repository.findByEmail(email);
 
         if(!account) {
@@ -47,6 +48,23 @@ export class AccountServiceImplementation implements AccountService {
         if(!passwordIsValid) {
             throw new BadRequestError('The email/password you entered isnt connected to an account');
         }
+
+        const output: AccountAuthenticatedOutputDto = {
+            id: account.id
+        }
+
+        return output
     }
     
+    public async increaseAccountBalance(amount: Decimal, accountId: string): Promise<void> {
+        const account = await this.repository.findById(accountId);
+
+        if(!account) {
+            throw new Error("User not found")
+        }
+        
+        account.increaseAccountBalance(amount);
+
+        await this.repository.update(account);
+    }
 }

@@ -2,6 +2,7 @@ import { NextFunction, Request, Response } from "express";
 import jwt from 'jsonwebtoken';
 
 import { UnauthorizedError } from "../helpers/api-errors.helper";
+import { Account } from "../entities/account";
 
 export const authMiddleware = (
     req: Request,
@@ -18,8 +19,10 @@ export const authMiddleware = (
     try {
         const secret = process.env.SECRET;
 
-        jwt.verify(token, secret ?? "");
+        const decodedToken = jwt.verify(token, secret ?? "");
 
+        res.locals.account = decodedToken as Account;
+        
         next()
     } catch(error) {
         throw new UnauthorizedError("Invalid or expired token");

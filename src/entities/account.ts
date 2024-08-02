@@ -1,10 +1,11 @@
+import { Decimal } from "@prisma/client/runtime/library";
 import bcrypt from "bcrypt";
-import { BadRequestError } from "../helpers/api-errors.helper";
 
 export type AccountProps = {
     id: string;
     name: string;
 	email: string;
+    balance: Decimal;
     createdAt: string;
 	password: string;
 }
@@ -17,16 +18,18 @@ export class Account {
             id: "",
             name,
             email,
+            balance: new Decimal(0.00),
             createdAt: "",
             password: password
         })
     }
 
-    public static with(id: string, name: string, email: string, createdAt: string, password: string) {
+    public static with(id: string, name: string, email: string, balance: Decimal, createdAt: string, password: string) {
         return new Account({
             id,
             name,
             email,
+            balance,
             createdAt,
             password
         })
@@ -34,12 +37,21 @@ export class Account {
 
     public static formatCreateAccountValues(id: string, name: string, email: string, createdAt: string, password: string) {
         return new Account({
-            id: "",
+            id,
             name,
             email: email.toLowerCase(),
-            createdAt: "",
+            balance: new Decimal(0.00),
+            createdAt: createdAt,
             password: bcrypt.hashSync(password, 10)
         })
+    }
+
+    public increaseAccountBalance(amount: Decimal) {
+        if(new Decimal(0).gte(amount)) {
+            throw new Error("Amount must be grather than zero")
+        }
+        
+        this.props.balance = this.props.balance.plus(amount);
     }
 
     public get id() {
@@ -52,6 +64,10 @@ export class Account {
 
     public get email() {
         return this.props.email
+    }
+
+    public get balance() {
+        return this.props.balance
     }
 
     public get createdAt() {

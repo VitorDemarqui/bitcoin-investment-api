@@ -22,13 +22,21 @@ const validationRegex: any = {
           errors.push(`${item} is required!`);
           return;
         }
-  
-        if (itemSchema.min && (body[item].length < itemSchema.min)) {
-          errors.push(`${item} - The minimum size is ${itemSchema.min}!`)
+
+        if (itemSchema.minValue && (body[item] < itemSchema.minValue)) {
+          errors.push(`${item} - The minimum value is ${itemSchema.minValue}!`)
         }
   
-        if (itemSchema.max && (body[item].length > itemSchema.max)) {
-          errors.push(`${item} - The maximum size is ${itemSchema.max}!`)
+        if (itemSchema.maxValue && (body[item] > itemSchema.maxValue)) {
+          errors.push(`${item} - The maximum value is ${itemSchema.maxValue}!`)
+        }
+  
+        if (itemSchema.minLength && (body[item].length < itemSchema.minLength)) {
+          errors.push(`${item} - The minimum size is ${itemSchema.minLength}!`)
+        }
+  
+        if (itemSchema.maxLength && (body[item].length > itemSchema.maxLength)) {
+          errors.push(`${item} - The maximum size is ${itemSchema.maxLength}!`)
         }
   
         const regexItem: any = validationRegex[item];
@@ -38,9 +46,8 @@ const validationRegex: any = {
         }
   
       })
-  
+
       if (errors.length > 0) return response.status(400).json(errors)
-  
   
       return next();
     }
