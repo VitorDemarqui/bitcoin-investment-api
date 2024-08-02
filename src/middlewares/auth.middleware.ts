@@ -1,8 +1,8 @@
 import { NextFunction, Request, Response } from "express";
 import jwt from 'jsonwebtoken';
 
-import { UnauthorizedError } from "../helpers/api-errors.helper";
 import { Account } from "../entities/account";
+import { UnauthorizedError } from "../util/api-errors.util";
 
 export const authMiddleware = (
     req: Request,

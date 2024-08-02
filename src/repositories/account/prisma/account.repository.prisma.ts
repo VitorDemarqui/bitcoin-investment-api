@@ -1,7 +1,7 @@
 import { PrismaClient } from "@prisma/client";
 import { Account } from "../../../entities/account";
 import { AccountRepository } from "../account.repository";
-import { NotFoundError } from "../../../helpers/api-errors.helper";
+import { NotFoundError } from "../../../util/api-errors.util";
 
 export class AccountRepositoryPrisma implements AccountRepository {
 

@@ -3,8 +3,8 @@ import bcrypt from "bcrypt";
 import { Account } from "../../../entities/account";
 import { AccountAuthenticatedOutputDto, AccountService, CreateAccountOutputDto } from "../account.service";
 import { AccountRepository } from "../../../repositories/account/account.repository";
-import { BadRequestError } from "../../../helpers/api-errors.helper";
 import { Decimal } from "@prisma/client/runtime/library";
+import { BadRequestError } from "../../../util/api-errors.util";
 
 export class AccountServiceImplementation implements AccountService {
     private constructor(readonly repository: AccountRepository){}
@@ -56,7 +56,7 @@ export class AccountServiceImplementation implements AccountService {
         return output
     }
     
-    public async increaseAccountBalance(amount: Decimal, accountId: string): Promise<void> {
+    public async increaseAccountBalance(amount: Decimal, accountId: string): Promise<Decimal> {
         const account = await this.repository.findById(accountId);
 
         if(!account) {
@@ -66,5 +66,7 @@ export class AccountServiceImplementation implements AccountService {
         account.increaseAccountBalance(amount);
 
         await this.repository.update(account);
+
+        return account.balance;
     }
 }

@@ -1,6 +1,7 @@
 import { PrismaClient } from "@prisma/client";
 import { Deposit } from "../../../entities/deposit";
 import { DepositRepository } from "../deposit.repository";
+import { NotFoundError } from "../../../util/api-errors.util";
 
 export class DepositRepositoryPrisma implements DepositRepository {
     private constructor(readonly prisma: PrismaClient){}
@@ -26,5 +27,37 @@ export class DepositRepositoryPrisma implements DepositRepository {
             aDeposit.email_sent,
             data.account_id
         )
+    }
+
+    public async update(deposit: Deposit): Promise<void> {
+        const data = {
+            id: deposit.id,
+            amount: deposit.amount,
+            email_sent: deposit.emailSent,
+            account_id: deposit.accountId
+        };
+
+        await this.prisma.deposit.update({
+            where: {
+                id: deposit.id
+            },
+            data,
+        });
+    }
+
+    public async findById(id: string): Promise<Deposit> {
+        const deposit = await this.prisma.deposit.findUnique({
+            where: { id },
+        });
+
+        if(!deposit) {
+            throw new NotFoundError("Deposit not found");
+        }
+
+        const { amount, created_at, email_sent, account_id } = deposit;
+
+        const response = Deposit.with(id, amount, created_at.toString(), email_sent, account_id);
+
+        return response;
     }
 }

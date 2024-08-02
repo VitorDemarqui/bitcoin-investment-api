@@ -1,11 +1,10 @@
 import { Request, Response } from "express";
-import { Decimal } from "@prisma/client/runtime/library";
-
 
 import { DepositRepositoryPrisma } from "../../../repositories/deposit/prisma/deposit.repository.prisma";
 import { DepositServiceImplementation } from "../../../services/deposit/implementation/deposit.service.implementation";
 import { Deposit } from "../../../entities/deposit";
 import { prisma } from "../../../util/prisma.util";
+import { decimalToNumber } from "../../../util/numberFormatter.util";
 
 export class DepositController {
     private constructor(){}
@@ -18,19 +17,19 @@ export class DepositController {
         const { amount } = request.body;
         const account = response.locals.account;
 
-        const aDeposit = Deposit.create(amount, account.id)
+        const deposit = Deposit.create(amount, account.id)
 
         const aRepository = DepositRepositoryPrisma.build(prisma);
         const aService = DepositServiceImplementation.build(aRepository);
 
-        const output = await aService.create(aDeposit);
+        const output = await aService.create(deposit, account);
 
         const body = {
             statusCode: 200,
             message: "Deposit successfully created",
             data: {
                 id: output.id,
-                amount: Decimal,
+                balance: decimalToNumber(output.balance),
                 createdAt: output.createdAt
             }
         };

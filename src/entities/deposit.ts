@@ -31,6 +31,16 @@ export class Deposit {
         })
     }
 
+    public updateEmailSentStatus(id: string, amount: Decimal, createdAt: string, emailSent: boolean, accountId: string) {
+        return new Deposit({
+            id,
+            amount,
+            createdAt,
+            emailSent: true,
+            accountId
+        })
+    }
+
     public get id() {
         return this.props.id
     }
@@ -45,6 +55,10 @@ export class Deposit {
 
     public get emailSent() {
         return this.props.emailSent
+    }
+
+    public set emailSent(emailSent: boolean) {
+        this.props.emailSent = emailSent;
     }
 
     public get accountId() {
