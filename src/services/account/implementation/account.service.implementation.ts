@@ -69,4 +69,14 @@ export class AccountServiceImplementation implements AccountService {
 
         return account.balance;
     }
+
+    public async getBalance(accountId: string): Promise<Decimal> {
+        const account = await this.repository.findById(accountId);
+
+        if(!account) {
+            throw new Error("User not found")
+        }
+
+        return account.balance
+    }
 }

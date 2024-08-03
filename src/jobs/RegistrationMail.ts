@@ -15,7 +15,7 @@ export default {
             to: email,
             from: mailConfig.mailHost ?? "",
             subject: 'Seu depósito foi processado com sucesso!',
-            text: 'Você depositou com sucesso ' + numberFormatterBRL(amount) + ' reais.'
+            text: 'Você depositou com sucesso ' + numberFormatterBRL(amount) + '.'
         }
         sgMail
             .send(msg)

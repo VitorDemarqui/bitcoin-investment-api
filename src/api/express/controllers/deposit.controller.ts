@@ -29,11 +29,12 @@ export class DepositController {
             message: "Deposit successfully created",
             data: {
                 id: output.id,
+                amount,
                 balance: decimalToNumber(output.balance),
                 createdAt: output.createdAt
             }
         };
 
-        response.status(200).json(body).send();
+        response.status(201).json(body).send();
     }
 }

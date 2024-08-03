@@ -16,5 +16,6 @@ export type AccountAuthenticatedOutputDto = {
 export interface AccountService {
     create(account: Account): Promise<CreateAccountOutputDto>;
     validateCredentials(email: string, password: string): Promise<AccountAuthenticatedOutputDto>;
-    increaseAccountBalance(amount: Decimal, accountId: string): Promise<Decimal> ;
+    increaseAccountBalance(amount: Decimal, accountId: string): Promise<Decimal>;
+    getBalance(accountId: string): Promise<Decimal>;
 }

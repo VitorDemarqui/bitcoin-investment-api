@@ -13,8 +13,16 @@ export class ApiExpress implements Api {
         return new ApiExpress(app);
     }
 
-    public addGetRoute(path: string, handle: (req: Request, res: Response) => Promise<void>): void {
-        this.app.get(path, handle);
+    public addGetRoute(
+        path: string,
+        schema: any,
+        authRequired: Boolean,
+        handle: (req: Request, res: Response) => Promise<void>
+    ): void {
+        const middleware: any[] = [];
+        if(authRequired) middleware.push(authMiddleware);
+
+        this.app.get(path, middleware,handle);
     }
 
     public addPostRoute(
