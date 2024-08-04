@@ -3,6 +3,7 @@ import { Deposit } from "../../../entities/deposit";
 import Queue from "../../../lib/Queue";
 import { AccountRepositoryPrisma } from "../../../repositories/account/prisma/account.repository.prisma";
 import { DepositRepository } from "../../../repositories/deposit/deposit.repository";
+import { decimalFormatterBRL } from "../../../util/numberFormatter.util";
 import { prisma } from "../../../util/prisma.util";
 import { AccountServiceImplementation } from "../../account/implementation/account.service.implementation";
 import { CreateDepositOutputDto, DepositService } from "../deposit.service";
@@ -28,8 +29,9 @@ export class DepositServiceImplementation implements DepositService {
 
         await Queue.add('RegistrationMail', { 
             id: newDeposit.id,
-            amount, 
-            email: account.email 
+            email: account.email ,
+            subject: 'Seu depósito foi processado com sucesso!',
+            text: 'Você depositou com sucesso ' + decimalFormatterBRL(amount) + '.'
         })
 
         const output: CreateDepositOutputDto = {
@@ -40,17 +42,5 @@ export class DepositServiceImplementation implements DepositService {
         };
 
         return output;
-    }
-
-    public async updateEmailSentStatus(idDeposit: string): Promise<void> {
-        const deposit = await this.repository.findById(idDeposit);
-
-        if(!deposit) {
-            throw new Error("User not found")
-        }
-
-        deposit.emailSent = true;
-
-        await this.repository.update(deposit)
     }
 }

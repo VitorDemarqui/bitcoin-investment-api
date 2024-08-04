@@ -22,6 +22,7 @@ model Account {
   created_at DateTime @default(now())
 	password  String
 	Deposit Deposit[]
+	Investment Investment[]
 }
 
 model Deposit {
@@ -29,10 +30,21 @@ model Deposit {
   id         String @id @default(uuid())
   amount     Decimal @db.Decimal(15, 2)
   created_at DateTime @default(now())
-  email_sent Boolean @default(false)
 
   account_id String
   account    Account @relation(fields: [account_id], references: [id])
+}
+
+model Investment {
+  @@map("investments")
+  id               String @id @default(uuid())
+  invested_amount  Decimal @db.Decimal(15, 2)
+  btc_quantity     Decimal @db.Decimal(20, 8)
+  purchase_rate    Decimal @db.Decimal(20, 8)
+  created_at       DateTime @default(now())
+
+  account_id       String
+  account          Account @relation(fields: [account_id], references: [id])
 }
 
     

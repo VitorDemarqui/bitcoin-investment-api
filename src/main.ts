@@ -8,6 +8,7 @@ import { depositSchema } from './middlewares/validations/schemes/deposit.schema'
 import { AuthController } from './api/express/controllers/auth.controller';
 import { DepositController } from './api/express/controllers/deposit.controller';
 import { BitcoinController } from './api/express/controllers/bitcoint.controller';
+import { InvestmentController } from './api/express/controllers/investment.controller';
 //criar enum -> no authorization required | authorization required
 
 const Authorization = Object.freeze({
@@ -22,6 +23,7 @@ function main() {
     const authController = AuthController.build();
     const depositController = DepositController.build();
     const bitcoinController = BitcoinController.build();
+    const investmentController = InvestmentController.build();
 
     api.addPostRoute("/login", loginSchema,  Authorization.NO_AUTH_REQUIRED, authController.login);
 
@@ -30,6 +32,7 @@ function main() {
     api.addPostRoute("/account/deposit", depositSchema, Authorization.AUTH_REQUIRED, depositController.create);
 
     api.addGetRoute("/btc/price", depositSchema, Authorization.AUTH_REQUIRED, bitcoinController.getPrice);
+    api.addPostRoute("/btc/purchase", depositSchema, Authorization.AUTH_REQUIRED, investmentController.create);
 
     api.app.use(errorMiddleware);
 

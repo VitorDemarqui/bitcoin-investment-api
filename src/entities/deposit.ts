@@ -4,7 +4,6 @@ export type DepositProps = {
     id:         string;
     amount:     Decimal;
     createdAt: string
-    emailSent: boolean;
     accountId: string;
 }
 
@@ -16,7 +15,6 @@ export class Deposit {
             id: "",
             amount,
             createdAt: "",
-            emailSent: false,
             accountId: accountId
         })
     }
@@ -26,7 +24,6 @@ export class Deposit {
             id,
             amount,
             createdAt,
-            emailSent,
             accountId
         })
     }
@@ -36,7 +33,6 @@ export class Deposit {
             id,
             amount,
             createdAt,
-            emailSent: true,
             accountId
         })
     }
@@ -51,14 +47,6 @@ export class Deposit {
 
     public get createdAt() {
         return this.props.createdAt
-    }
-
-    public get emailSent() {
-        return this.props.emailSent
-    }
-
-    public set emailSent(emailSent: boolean) {
-        this.props.emailSent = emailSent;
     }
 
     public get accountId() {

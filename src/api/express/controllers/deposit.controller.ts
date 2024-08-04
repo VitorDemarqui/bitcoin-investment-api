@@ -25,7 +25,7 @@ export class DepositController {
         const output = await aService.create(deposit, account);
 
         const body = {
-            statusCode: 200,
+            statusCode: 201,
             message: "Deposit successfully created",
             data: {
                 id: output.id,

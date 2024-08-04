@@ -33,7 +33,6 @@ export class DepositRepositoryPrisma implements DepositRepository {
         const data = {
             id: deposit.id,
             amount: deposit.amount,
-            email_sent: deposit.emailSent,
             account_id: deposit.accountId
         };
 

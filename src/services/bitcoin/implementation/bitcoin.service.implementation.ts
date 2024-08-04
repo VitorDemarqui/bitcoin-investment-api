@@ -1,3 +1,4 @@
+import { Decimal } from "@prisma/client/runtime/library";
 import { BitcoinClient } from "../../../client/bitcoin/bitcoin.client";
 import { ServiceUnavailableError } from "../../../util/api-errors.util";
 import { BitcoinPriceOutputDto, BitcoinService } from "../bitcoin.service";
@@ -24,5 +25,13 @@ export class BitcoinServiceImplementation implements BitcoinService {
         }
 
         return output;
+    }
+
+    public getQtyBitcoinPurchased(amount: Decimal, sellValue: Decimal): Decimal {
+        console.log(Number(amount) / Number(sellValue))
+        const purchasedBitcoin = Decimal.div(amount, sellValue)
+
+        console.log(purchasedBitcoin)
+        return purchasedBitcoin;
     }
 }

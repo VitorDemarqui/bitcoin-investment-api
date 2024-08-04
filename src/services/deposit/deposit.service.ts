@@ -11,5 +11,4 @@ export type CreateDepositOutputDto = {
 
 export interface DepositService {
     create(deposit: Deposit, account: Account): Promise<CreateDepositOutputDto>;
-    updateEmailSentStatus(idDeposit: string): Promise<void>;
 }

@@ -9,23 +9,16 @@ export default {
     key: 'RegistrationMail',
     async handle(data: any) {
         sgMail.setApiKey(mailConfig.apiKey ?? "")
-        const { amount, email, id } = data.data;
+        const { email, id, subject, text } = data.data;
 
         const msg = {
             to: email,
             from: mailConfig.mailHost ?? "",
-            subject: 'Seu depósito foi processado com sucesso!',
-            text: 'Você depositou com sucesso ' + numberFormatterBRL(amount) + '.'
+            subject,
+            text
         }
         sgMail
-            .send(msg)
-            .then(() => {
-                const aRepository = DepositRepositoryPrisma.build(prisma);
-                const aService = DepositServiceImplementation.build(aRepository);
-
-                aService.updateEmailSentStatus(id);
-            })
-         
+        .send(msg)
         .catch((error) => {
             console.error(error)
             console.error(error.response.body)

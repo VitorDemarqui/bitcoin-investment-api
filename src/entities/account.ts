@@ -54,6 +54,14 @@ export class Account {
         this.props.balance = this.props.balance.plus(amount);
     }
 
+    public decreaseAccountBalance(amount: Decimal) {
+        if(new Decimal(0).gte(amount)) {
+            throw new Error("Amount must be grather than zero")
+        }
+        
+        this.props.balance = this.props.balance.minus(amount);
+    }
+
     public get id() {
         return this.props.id
     }
