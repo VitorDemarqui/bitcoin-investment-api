@@ -9,6 +9,7 @@ import { AuthController } from './api/express/controllers/auth.controller';
 import { DepositController } from './api/express/controllers/deposit.controller';
 import { BitcoinController } from './api/express/controllers/bitcoint.controller';
 import { InvestmentController } from './api/express/controllers/investment.controller';
+import { purchaseSchema } from './middlewares/validations/schemes/purchase.schema';
 //criar enum -> no authorization required | authorization required
 
 const Authorization = Object.freeze({
@@ -28,12 +29,12 @@ function main() {
     api.addPostRoute("/login", loginSchema,  Authorization.NO_AUTH_REQUIRED, authController.login);
 
     api.addPostRoute("/account", accountSchema, Authorization.NO_AUTH_REQUIRED, accountController.create);
-    api.addGetRoute("/account/balance", depositSchema, Authorization.AUTH_REQUIRED, accountController.getBalance);
+    api.addGetRoute("/account/balance", Authorization.AUTH_REQUIRED, accountController.getBalance);
     api.addPostRoute("/account/deposit", depositSchema, Authorization.AUTH_REQUIRED, depositController.create);
 
-    api.addGetRoute("/btc/price", depositSchema, Authorization.AUTH_REQUIRED, bitcoinController.getPrice);
-    api.addGetRoute("/btc", depositSchema, Authorization.AUTH_REQUIRED, investmentController.getPosition);
-    api.addPostRoute("/btc/purchase", depositSchema, Authorization.AUTH_REQUIRED, investmentController.create);
+    api.addGetRoute("/btc/price", Authorization.AUTH_REQUIRED, bitcoinController.getPrice);
+    api.addGetRoute("/btc", Authorization.AUTH_REQUIRED, investmentController.getPosition);
+    api.addPostRoute("/btc/purchase", purchaseSchema, Authorization.AUTH_REQUIRED, investmentController.create);
 
     api.app.use(errorMiddleware);
 

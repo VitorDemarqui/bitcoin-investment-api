@@ -1,4 +1,5 @@
 # bitcoin-investment-api
+node version - v20.16.0
 
 # docker-compose to run postgres and redis(queue)
 docker-compose up
@@ -14,6 +15,9 @@ select * from investments;
 
 # to run application/queue and migrations
 npm run start:migrate
+
+# to run without migrations
+npm run dev
 
 # you can use postman to test
 # examples: https://cdn.eduzzcdn.com/files/desafio-postman.json

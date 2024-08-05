@@ -15,7 +15,6 @@ export class ApiExpress implements Api {
 
     public addGetRoute(
         path: string,
-        schema: any,
         authRequired: Boolean,
         handle: (req: Request, res: Response) => Promise<void>
     ): void {
