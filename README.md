@@ -14,3 +14,8 @@ select * from investments;
 
 # to run application/queue and migrations
 npm run start:migrate
+
+# you can use postman to test
+# examples: https://cdn.eduzzcdn.com/files/desafio-postman.json
+
+# DESAFIOS COMPLETOS ATE O NUMERO - 7 Posição dos investimentos
