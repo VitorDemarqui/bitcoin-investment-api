@@ -6,7 +6,7 @@
     "dev": "npm-run-all -p dev:*",
     "dev:server": "nodemon src/main.ts",
     "dev:queue": "nodemon src/queue.ts",
-    "start:migrate": "prisma migrate deploy && npm run dev"
+    "start:migrate": "prisma generate && prisma migrate deploy && npm run dev"
   },
   "keywords": [],
   "author": "",
