@@ -19,16 +19,7 @@ export class Deposit {
         })
     }
 
-    public static with(id: string, amount: Decimal, createdAt: string, emailSent: boolean, accountId: string) {
-        return new Deposit({
-            id,
-            amount,
-            createdAt,
-            accountId
-        })
-    }
-
-    public updateEmailSentStatus(id: string, amount: Decimal, createdAt: string, emailSent: boolean, accountId: string) {
+    public static with(id: string, amount: Decimal, createdAt: string, accountId: string) {
         return new Deposit({
             id,
             amount,

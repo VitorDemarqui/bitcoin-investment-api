@@ -11,6 +11,16 @@ export type CreateInvestmentOutputDto = {
     createdAt: string
 };
 
+export type PositionInvestmentOutputDto = {
+    id: string
+    amount: Decimal
+    purchaseRate: Decimal
+    variation: string
+    currentValue: string
+    purchaseDate: string
+};
+
 export interface InvestmentService {
     create(investment: Investment, account: Account): Promise<CreateInvestmentOutputDto>;
+    getPosition(account: Account): Promise<PositionInvestmentOutputDto[]>;
 }

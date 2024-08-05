@@ -8,7 +8,7 @@ import { InvestmentRepository } from "../../../repositories/investment/investmen
 import { prisma } from "../../../util/prisma.util";
 import { AccountServiceImplementation } from "../../account/implementation/account.service.implementation";
 import { BitcoinServiceImplementation } from "../../bitcoin/implementation/bitcoin.service.implementation";
-import { CreateInvestmentOutputDto, InvestmentService } from "../investment.service.implementation";
+import { CreateInvestmentOutputDto, InvestmentService, PositionInvestmentOutputDto } from "../investment.service.implementation";
 import { decimalFormatterBRL } from "../../../util/numberFormatter.util";
 import { BadRequestError } from "../../../util/api-errors.util";
 
@@ -31,7 +31,6 @@ export class InvestmentServiceImplementation implements InvestmentService {
 
         const balance = await accountService.getBalance(accountId);
 
-        console.log('chegou')
         if(balance < investedAmount) {
             throw new BadRequestError("Amount greater than balance!")
         }
@@ -64,4 +63,35 @@ export class InvestmentServiceImplementation implements InvestmentService {
         return output;
     }
     
+    public async getPosition(account: Account): Promise<PositionInvestmentOutputDto[]> {
+        const bitcoinClient = BitcoinClientImplementation.build();
+        const bitcoinService = BitcoinServiceImplementation.build(bitcoinClient);
+
+        const bitcointPrice = await bitcoinService.getBitcoinPrice();
+
+        const investments = await this.repository.findByIdAccount(account.id);
+
+        const output: PositionInvestmentOutputDto[] = investments.map((investment) => {
+            const variation = Decimal
+                .sub(bitcointPrice.buy, investment.purchaseRate)
+                .div(investment.purchaseRate)
+                .mul(100)
+                .toFixed(8);    
+
+            const currentValue = Decimal
+                .mul(investment.btcQuantity, bitcointPrice.buy)
+                .toFixed(8);
+
+            return {
+                id: investment.id,
+                amount: investment.investedAmount,
+                purchaseRate: investment.purchaseRate,
+                variation: variation.includes("-") ? variation : "+" + variation  + "%",
+                currentValue,
+                purchaseDate: investment.createdAt.toString(),
+            };
+        })
+
+        return output;
+    }
 }

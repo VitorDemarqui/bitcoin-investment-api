@@ -1,9 +1,5 @@
 import sgMail from "@sendgrid/mail"
 import mailConfig from '../config/mail'
-import { prisma } from "../util/prisma.util";
-import { DepositRepositoryPrisma } from "../repositories/deposit/prisma/deposit.repository.prisma";
-import { DepositServiceImplementation } from "../services/deposit/implementation/deposit.service.implementation";
-import { numberFormatterBRL } from "../util/numberFormatter.util";
 
 export default {
     key: 'RegistrationMail',

@@ -32,6 +32,7 @@ function main() {
     api.addPostRoute("/account/deposit", depositSchema, Authorization.AUTH_REQUIRED, depositController.create);
 
     api.addGetRoute("/btc/price", depositSchema, Authorization.AUTH_REQUIRED, bitcoinController.getPrice);
+    api.addGetRoute("/btc", depositSchema, Authorization.AUTH_REQUIRED, investmentController.getPosition);
     api.addPostRoute("/btc/purchase", depositSchema, Authorization.AUTH_REQUIRED, investmentController.create);
 
     api.app.use(errorMiddleware);

@@ -24,7 +24,6 @@ export class DepositRepositoryPrisma implements DepositRepository {
             aDeposit.id,
             data.amount,
             aDeposit.created_at.toString(),
-            aDeposit.email_sent,
             data.account_id
         )
     }
@@ -53,9 +52,9 @@ export class DepositRepositoryPrisma implements DepositRepository {
             throw new NotFoundError("Deposit not found");
         }
 
-        const { amount, created_at, email_sent, account_id } = deposit;
+        const { amount, created_at, account_id } = deposit;
 
-        const response = Deposit.with(id, amount, created_at.toString(), email_sent, account_id);
+        const response = Deposit.with(id, amount, created_at.toString(), account_id);
 
         return response;
     }

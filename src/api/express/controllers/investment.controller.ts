@@ -39,4 +39,15 @@ export class InvestmentController {
 
         response.status(201).json(body).send();
     }
+
+    public async getPosition(request: Request, response: Response) {
+        const account = response.locals.account;
+
+        const aRepository = InvestmentRepositoryPrisma.build(prisma);
+        const aService = InvestmentServiceImplementation.build(aRepository);
+
+        const output = await aService.getPosition(account);
+
+        response.status(200).json(output).send();
+    }
 }

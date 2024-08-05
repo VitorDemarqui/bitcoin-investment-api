@@ -1,0 +1,21 @@
+version: '3.8'
+
+services:
+  redis:
+    image: redis:latest
+    container_name: cache
+    ports:
+      - 6379:6379
+
+  postgres:
+    container_name: postgres-investmentdb
+    image: postgres:latest
+    environment:
+      POSTGRES_DB: investmentdb
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_USER: postgres
+    volumes:
+      - ./postgres-data:/var/lib/postgresql/data
+    ports:
+      - 5432:5432
+    restart: on-failure:3 
